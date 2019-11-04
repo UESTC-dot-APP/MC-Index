@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3e149ff6-8d5e-4a8a-bc43-553c1cbfaf0b" name="mineland" url="http://mineland.cn">
+        <fileTransfer host="mineland.cn" port="22" rootFolder="/usr/share/nginx/mineland" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
