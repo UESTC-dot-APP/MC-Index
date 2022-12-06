@@ -1,253 +1,335 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head>
+    <title>MC @ UESTClug</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="UESTC LUG Minecraft Server." />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <noscript>
+      <link rel="stylesheet" href="assets/css/noscript.css"
+    /></noscript>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <script>
+      let version = 1.19;
+      let plugins = [
+        "DimThread(多线程维度)",
+        "BlueMap(网页地图)",
+        "FallingTree(砍树)",
+        "CCME(区块加载引擎)",
+        "GolfIV(反作弊)",
+        "Lithium(优化)",
+        "Starlight(优化)",
+      ];
+      let connections = {
+        "SRV 记录": ["uestc.app (成都教育网)", "nia.dn42 (DN42)"],
+        "A/CNAME 记录": [
+          "mc-cernet1.uestc.app (成都教育网)",
+          "mc-hk1.uestc.app (香港)",
+          "mc-hz1.uestc.app (杭州)",
+          "mc-gz1.uestc.app (广州)",
+        ],
+        "A/CNAME 记录 (特殊地区)": [
+          "mc.nia.dn42 (DN42)",
+          "mc-campus1.uestc.app (UESTC 校内)",
+        ],
+      };
+      let changelogs = [
+        {
+          title: "10.0.0 RELEASE",
+          date: "22-07-15",
+          log: ["升级 1.19，并保持持续滚动。"],
+        },
+        {
+          title: "9.0.0 RELEASE",
+          date: "21-12-15",
+          log: ["升级 1.18.1，并保持持续滚动。"],
+        },
+        {
+          title: "9.0.0 BETA",
+          date: "21-12-03",
+          log: ["尝试升级 1.18。"],
+        },
+        {
+          title: "8.0.0 BETA",
+          date: "21-09-08",
+          log: ["添加新的 MOD 服务器。"],
+        },
+        {
+          title: "7.1.0 BETA",
+          date: "21-08-29",
+          log: ["升级 1.17.1。"],
+        },
+        {
+          title: "7.0.0 BETA",
+          date: "21-04-20",
+          log: [
+            "由于 Mojang 咕了 1.17，不得不选择回归原版。",
+            "加入了很多新的性能优化插件。",
+            "搬迁了服务器的物理位置。",
+          ],
+        },
+        {
+          title: "6.0.0 BETA",
+          date: "20-12-10",
+          log: [
+            "合并重置 Stable & Beta，节省资源。",
+            "改为更加先进的 fabric 架构，提高性能并增加若干 MOD。",
+            "升级 1.16.4。",
+          ],
+        },
+        {
+          title: "5.0.0 STABLE & BETA",
+          date: "20-07-05",
+          log: ["服务器分叉，分别设立 Stable 和 Beta。", "全线升级 1.16.1。"],
+        },
+        {
+          title: "4.0.0 BETA",
+          date: "20-03-21",
+          log: ["删库恢复。"],
+        },
+        {
+          title: "3.0.0 BETA",
+          date: "20-02-02",
+          log: [
+            "2020春季纯净版。",
+            "服务端考虑加入经济系统和其他辅助插件，目前暂不可用。",
+          ],
+        },
+        {
+          title: "2.0.0 BETA",
+          date: "19-12-26",
+          log: ["正式发布2020版本。"],
+        },
+        {
+          title: "1.2.0 BETA",
+          date: "19-12-26",
+          log: [
+            "全新的Beta测试。",
+            "完整更新列表参考<a href='https://md.uestclug.org/i3R-4bkVTX2gserCL-n3OA'>这里</a>",
+          ],
+        },
+        {
+          title: "1.1.0",
+          date: "19-12-03",
+          log: [
+            "更新了插件。",
+            "跟随更新了 mod，并增加了墓碑 mod。",
+            "由于服务器性能很好，移除了不兼容的卡顿查询插件，并且不寻找替代。",
+          ],
+        },
+        {
+          title: "0.0.1",
+          date: "19-11-04",
+          log: ["建立服务器。"],
+        },
+      ];
 
-<head>
-  <title>MC @ UESTClug</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <link rel="stylesheet" href="assets/css/main.css" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
-  <noscript>
-    <link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-</head>
+      function printlist(ls, insert = null) {
+        document.write("<ul>");
+        ls.forEach((l) => {
+          if (insert) document.write(`<li><${insert}>${l}</${insert}></li>`);
+          else document.write(`<li>${l}</li>`);
+        });
+        document.write("</ul>");
+      }
+    </script>
+  </head>
 
-<body class="is-preload">
-  <!-- Wrapper -->
-  <div id="wrapper">
-    <!-- Header -->
-    <header id="header">
-      <div class="logo">
-        <span class="icon fa-cube"></span>
-      </div>
-      <div class="content">
-        <div class="inner">
-          <h1>MC @ UESTClug</h1>
-          <h2>Presented by UESTC LUG</h2>
-          <p>
-            1.18.1 纯净生存<br />
-            Welcome to UESTC LUG Minecraft Server
-          </p>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Header -->
+      <header id="header">
+        <div class="logo">
+          <span class="icon fa-cube"></span>
         </div>
+        <div class="content">
+          <div class="inner">
+            <h1>MC @ UESTClug</h1>
+            <h2>Presented by UESTC LUG</h2>
+            <p>
+              <script>
+                document.write(version);
+              </script>
+              纯净生存<br />
+              Welcome to UESTC LUG Minecraft Server
+            </p>
+          </div>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="#client">下载</a></li>
+            <li><a href="#update">更新</a></li>
+            <li><a href="#about">关于</a></li>
+            <li><a href="#group">群组</a></li>
+            <li><a href="#usage">使用</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- Main -->
+      <div id="main">
+        <!-- Intro -->
+        <article id="client">
+          <h2 class="major">下载</h2>
+          <section>
+            <h2>10.0.0 Release 更新日志</h2>
+            <h3>更新时间： 2022-07</h3>
+            <p>服务器被升级到 1.19，并将维持版本的同时滚动更新插件。</p>
+          </section>
+          <hr />
+          <h4>
+            (请自行安装 1.19
+            版本的客户端，高清修复及光影材质请自行安装，我们推荐性能更佳的
+            fabric 和 iris。)
+          </h4>
+          <p>
+            <a
+              href="https://mc-map.uestc.app"
+              class="button icon fa-map disabled"
+              >网页地图</a
+            >
+            <a href="http://mc-map.nia.dn42" class="button icon fa-map disabled"
+              >网页地图 (DN42)</a
+            >
+          </p>
+        </article>
+
+        <!-- Work -->
+        <article id="update">
+          <h2 class="major">更新内容</h2>
+          <script>
+            changelogs.forEach((c) => {
+              document.write(`<h3>${c.title} | ${c.date}</h3>`);
+              printlist(c.log);
+            });
+          </script>
+        </article>
+
+        <!-- About -->
+        <article id="about">
+          <h2 class="major">关于</h2>
+          <span class="image main"><img src="images/pic03.jpg" alt="" /></span>
+          <p>
+            这是一个版本为
+            <script>
+              document.write(version);
+            </script>
+            的纯净生存服务器。
+          </p>
+          <p>包含以下插件：</p>
+          <script>
+            printlist(plugins);
+          </script>
+          <hr />
+          <h3>服务器连接地址</h3>
+          <script>
+            Object.keys(connections).forEach((g) => {
+              document.write(`<p>${g}：</p>`);
+              printlist(connections[g], "code");
+            });
+          </script>
+          <p>本服务器由 UESTC LUG 建立并维护，更多需求请联系相关管理。</p>
+        </article>
+
+        <!-- Contact -->
+        <article id="group">
+          <h2 class="major">交流</h2>
+          <p>请使用以下按钮加入我们的 Telegram 群组。</p>
+          <ul class="icons">
+            <li>
+              <a
+                onclick="alert('请查看 mc-chat.uestc.app 对应的 TXT 记录。')"
+                class="fab fa-telegram-plane"
+              ></a>
+            </li>
+          </ul>
+        </article>
+
+        <!-- Elements -->
+        <article id="usage">
+          <h2 class="major">使用说明</h2>
+          <section>
+            <h3 class="major">启动器</h3>
+            <h4>可选的部分启动器列表</h4>
+            <ul>
+              <li>官方启动器</li>
+              <li>
+                <a href="https://hmcl.huangyuhui.net/download">HMCL (GPLv3) </a>
+              </li>
+              <li><a href="https://github.com/bangbang93/BMCL">BMCL</a></li>
+              以下是 尚未确定/闭源 的启动器：
+              <li><a href="https://tlauncher.org/en/">TLauncher</a></li>
+              <li><a href="https://www.bakaxl.com">BakaXL</a></li>
+              <li>...</li>
+            </ul>
+            <h4>或者本校提供的 HMCL flatpak 镜像</h4>
+            <ul>
+              <li>
+                <a href="http://mirrors.uestc.cn/uestclug/flatpakrepo/"
+                  >UESTC Mirrors</a
+                >
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section>
+            <h3 class="major">部分问题</h3>
+            <ul>
+              <li>
+                <h4>暂无，等您来提</h4>
+              </li>
+            </ul>
+          </section>
+          <hr />
+          <section>
+            <h3 class="major">游戏体验</h3>
+            <p>
+              相关插件的使用方法，将会在进入游戏时发放的手册中做出说明（WIP）。同时也提供一个入门手册（WIP）。
+            </p>
+            <a href="" class="button icon fa-download disabled">入门手册</a>
+          </section>
+        </article>
       </div>
-      <nav>
-        <ul>
-          <li><a href="#client">下载</a></li>
-          <li><a href="#update">更新</a></li>
-          <li><a href="#about">关于</a></li>
-          <li><a href="#group">群组</a></li>
-          <li><a href="#usage">使用</a></li>
-        </ul>
-      </nav>
-    </header>
 
-    <!-- Main -->
-    <div id="main">
-      <!-- Intro -->
-      <article id="client">
-        <h2 class="major">下载</h2>
-        <section>
-          <h2>9.0.0 Release 更新日志</h2>
-          <h3>更新时间： 2021-12-15</h3>
-          <p>
-	    服务器被升级到 1.18.1，并将维持版本的同时滚动更新插件。
-          </p>
-        </section>
-        <hr />
-        <h4>
-          (请自行安装 1.18.1 版本的客户端，高清修复及光影材质请自行安装，我们推荐性能更佳的 fabric 和 iris。)
-        </h4>
-        <p>
-          <a href="https://mc-map.uestc.app" class="button icon fa-map">网页地图</a>
-          <a href="http://mc-map.nia.dn42" class="button icon fa-map">网页地图 (DN42)</a>
-        </p>
-      </article>
-
-      <!-- Work -->
-      <article id="update">
-        <h2 class="major">更新内容</h2>
-	<h3>9.0.0 Release | 21-12-15</h3>
-	<ul>
-	  <li>升级 1.18.1，并保持持续滚动。</li>
-	</ul>
-	<h3>9.0.0 Beta | 21-12-03</h3>
-	<ul>
-	  <li>尝试升级 1.18。</li>
-	</ul>
-        <h3>8.0.0 Beta | 21-09-08</h3>
-        <ul>
-          <li>添加新的 MOD 服务器。</li>
-        </ul>
-        <h3>7.1.0 Beta | 21-08-29</h3>
-        <ul>
-          <li>升级 1.17.1。</li>
-        </ul>
-        <h3>7.0.0 Beta | 21-04-20</h3>
-        <ul>
-          <li>由于 Mojang 咕了 1.17，不得不选择回归原版。</li>
-          <li>加入了很多新的性能优化插件。</li>
-          <li>搬迁了服务器的物理位置。</li>
-        </ul>
-        <h3>6.0.0 Beta | 20-12-10</h3>
-        <ul>
-          <li>合并重置 Stable & Beta，节省资源。</li>
-          <li>改为更加先进的 fabric 架构，提高性能并增加若干 MOD。</li>
-          <li>升级 1.16.4。</li>
-        </ul>
-        <h3>5.0.0 Stable & Beta | 20-07-05</h3>
-        <ul>
-          <li>服务器分叉，分别设立 Stable 和 Beta。</li>
-          <li>全线升级 1.16.1。</li>
-        </ul>
-        <h3>4.0.0 Beta | 20-03-21</h3>
-        <ul>
-          <li>删库恢复。</li>
-        </ul>
-        <h3>3.0.0 Beta | 20-02-02</h3>
-        <ul>
-          <li>2020春季纯净版。</li>
-          <li>服务端考虑加入经济系统和其他辅助插件，目前暂不可用。</li>
-        </ul>
-        <h3>2.0.0 Beta | 19-12-26</h3>
-        <ul>
-          <li>正式发布2020版本。</li>
-        </ul>
-        <h3>0.2.0 Beta | 19-12-26</h3>
-        <ul>
-          <li>全新的Beta测试。</li>
-          <li>
-            完整更新列表参考<a href="https://md.uestclug.org/i3R-4bkVTX2gserCL-n3OA">这里</a>。
-          </li>
-        </ul>
-        <h3>1.1.0 | 19-12-03</h3>
-        <ul>
-          <li>更新了插件。</li>
-          <li>跟随更新了 mod，并增加了墓碑 mod。</li>
-          <li>
-            由于服务器性能很好，移除了不兼容的卡顿查询插件，并且不寻找替代。
-          </li>
-        </ul>
-        <h3>0.0.1 | 19-11-04</h3>
-        <ul>
-          <li>建立服务器。</li>
-        </ul>
-      </article>
-
-      <!-- About -->
-      <article id="about">
-        <h2 class="major">关于</h2>
-        <span class="image main"><img src="images/pic03.jpg" alt="" /></span>
-        <p>这是一个版本为 1.18.1 的纯净生存服务器。</p>
-        <p>包含以下插件：</p>
-        <ul>
-          <li>DimThread(多线程维度)</li>
-          <li>BlueMap(网页地图)</li>
-          <li>FallingTree(砍树)</li>
-          <li>CCME(区块加载引擎)</li>
-          <li>GolfIV(反作弊)</li>
-          <li>Lithium(优化)</li>
-          <li>Starlight(优化)</li>
-        </ul>
-        <hr />
-        <h3>服务器连接地址</h3>
-        <p>A/CNAME 记录：</p>
-        <ul>
-          <li><code>mc-serv.uestc.app (CERNET)</code></li>
-	  <li><code>mc-hz1.uestc.app (杭州1)</code></li>
-	  <li><code>mc-cd1.uestc.app (成都1)</code></li>
-          <li><code>mc-hk1.uestc.app (香港1)</code></li>
-          <li><code>mc.nia.dn42 (DN42)</code></li>
-        </ul>
-        <p>SRV 记录：</p>
-        <ul>
-          <li><code>uestc.app</code></li>
-          <li><code>nia.dn42 (DN42)</code></li>
-        </ul>
-        <p>由于 CERNET 政策原因，CERNET 线路暂时无法向公网开放。</p>
-        <p>本服务器由 UESTC LUG 建立并维护，更多需求请联系相关管理。</p>
-      </article>
-
-      <!-- Contact -->
-      <article id="group">
-        <h2 class="major">交流</h2>
-        <p>
-          请使用以下按钮加入我们的 Telegram 群组。
-        </p>
-        <ul class="icons">
-          <li><a onclick="alert('请查看 mc-chat.uestc.app 对应的 TXT 记录。')" class="fab fa-telegram-plane"></a></li>
-        </ul>
-      </article>
-
-      <!-- Elements -->
-      <article id="usage">
-        <h2 class="major">使用说明</h2>
-        <section>
-          <h3 class="major">启动器</h3>
-          <h4>可选的部分启动器列表</h4>
-          <ul>
-            <li>官方启动器</li>
-            <li>
-              <a href="https://hmcl.huangyuhui.net/download">HMCL (GPLv3) </a>
-            </li>
-            <li><a href="https://github.com/bangbang93/BMCL">BMCL</a></li>
-            以下是 尚未确定/闭源 的启动器：
-            <li><a href="https://tlauncher.org/en/">TLauncher</a></li>
-            <li><a href="https://www.bakaxl.com">BakaXL</a></li>
-            <li>...</li>
-          </ul>
-          <h4>或者本校提供的 HMCL flatpak 镜像</h4>
-          <ul>
-            <li>
-              <a href="http://mirrors.uestc.cn/uestclug/flatpakrepo/">UESTC Mirrors</a>
-            </li>
-          </ul>
-        </section>
-        <hr />
-        <section>
-          <h3 class="major">部分问题</h3>
-          <ul>
-            <li>
-              <h4>暂无，等您来提</h4>
-            </li>
-          </ul>
-        </section>
-        <hr />
-        <section>
-          <h3 class="major">游戏体验</h3>
-          <p>
-            相关插件的使用方法，将会在进入游戏时发放的手册中做出说明（WIP）。同时也提供一个入门手册（WIP）。
-          </p>
-          <a href="" class="button icon fa-download disabled">入门手册</a>
-        </section>
-      </article>
+      <!-- Footer -->
+      <footer id="footer">
+        <p class="copyright">&copy; MC @ UESTCLUG.</p>
+      </footer>
     </div>
 
-    <!-- Footer -->
-    <footer id="footer">
-      <p class="copyright">&copy; MC @ UESTCLUG.</p>
-    </footer>
-  </div>
+    <!-- BG -->
+    <div id="bg">
+      <canvas id="sakura"></canvas>
+    </div>
 
-  <!-- BG -->
-  <div id="bg">
-    <canvas id="sakura"></canvas>
-  </div>
-
-  <!-- Scripts -->
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/browser.min.js"></script>
-  <script src="assets/js/breakpoints.min.js"></script>
-  <script src="assets/js/util.js"></script>
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/sakura.js"></script>
-</body>
-
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/sakura.js"></script>
+  </body>
 </html>
 
 <!-- sakura shader -->
-<script id="sakura_point_vsh" type="x-shader/x_vertex" src="shaders/sakura.shader">
+<script
+  id="sakura_point_vsh"
+  type="x-shader/x_vertex"
+  src="shaders/sakura.shader"
+>
   uniform mat4 uProjection;
   uniform mat4 uModelview;
   uniform vec3 uResolution;
